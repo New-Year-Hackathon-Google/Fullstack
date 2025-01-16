@@ -1,3 +1,9 @@
+import Chat from './_components/Chat';
+
 export default function MatchPage() {
-  return <div>match page</div>;
+  return (
+    <div>
+      <Chat />
+    </div>
+  );
 }
