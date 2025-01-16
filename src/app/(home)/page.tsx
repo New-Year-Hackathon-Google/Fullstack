@@ -1,6 +1,6 @@
 import HeroSection from '@/components/layouts/Hero/HeroSection';
 
-export default function Home() {
+export default function HomePage() {
   return (
     <div>
       <HeroSection />
