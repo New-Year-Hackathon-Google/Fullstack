@@ -1,3 +1,9 @@
+import HeroSection from '@/components/layouts/Hero/HeroSection';
+
 export default function Home() {
-  return <div>메인</div>;
+  return (
+    <div>
+      <HeroSection />
+    </div>
+  );
 }
