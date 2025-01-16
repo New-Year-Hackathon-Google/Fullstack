@@ -24,7 +24,7 @@ const Navbar = () => {
             <Link
               key={item.title}
               href={item.href}
-              className='rounded-md px-3 font-bold text-gray-600 hover:text-gray-900'
+              className='rounded-md px-3 text-lg font-bold text-gray-600 hover:text-gray-900'
             >
               {item.title}
             </Link>
