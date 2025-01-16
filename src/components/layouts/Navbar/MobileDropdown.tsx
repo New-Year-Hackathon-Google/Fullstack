@@ -76,6 +76,12 @@ export default function MobileDropdown() {
               </div>
             ))}
           </div>
+          <Link
+            href='/login'
+            className='flex justify-center bg-blue-400 py-2 font-semibold text-white duration-200 hover:bg-blue-500'
+          >
+            Login
+          </Link>
         </div>
       )}
     </div>
