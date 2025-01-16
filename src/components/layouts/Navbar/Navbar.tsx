@@ -35,7 +35,7 @@ const Navbar = () => {
         <div className='hidden items-center md:flex'>
           <Link
             href='/login'
-            className='rounded-xl bg-blue-300 p-3 font-semibold text-white duration-200 hover:scale-110'
+            className='rounded-xl bg-blue-400 p-3 font-semibold text-white duration-200 hover:scale-110 hover:bg-blue-500'
           >
             로그인
           </Link>
