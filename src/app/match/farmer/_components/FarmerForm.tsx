@@ -24,7 +24,7 @@ export default function FarmerForm() {
     e.preventDefault();
 
     try {
-      await axios.post('/api/farmers', formData);
+      await axios.post('/api/farmer', formData);
       alert('Form submitted successfully!');
     } catch (error) {
       console.error('Error submitting form:', error);
