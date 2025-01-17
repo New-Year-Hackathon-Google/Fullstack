@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
-import { getFarmerData } from '../farmer/route';
-import { getYouthData } from '../youth/route';
 
 export async function GET() {
   try {
