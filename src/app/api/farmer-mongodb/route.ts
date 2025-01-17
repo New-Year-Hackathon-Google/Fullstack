@@ -1,5 +1,5 @@
 import { connectMongoDB } from '@/lib/mongodb';
-import FarmerForm, { IFarmerForm } from '@/model/farmerForm';
+import FarmerForm from '@/model/farmerForm';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -7,7 +7,7 @@ export async function GET() {
     await connectMongoDB();
 
     // Fetch all documents from the farmerForm collection
-    const farmers: IFarmerForm[] = await FarmerForm.find({});
+    const farmers = await FarmerForm.find({});
 
     return NextResponse.json({ farmers }, { status: 200 });
   } catch (error) {
