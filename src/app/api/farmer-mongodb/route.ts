@@ -23,14 +23,13 @@ export async function POST(request: Request) {
   try {
     await connectMongoDB();
 
-    // Parse the JSON body from the request
     const body = await request.json();
 
-    const { id, name, type, imageUrl, duration } = body;
-    if (!id || !name || !type || !imageUrl || !duration) {
+    const { name, type, imageUrl, duration } = body;
+    if (!name || !type || !imageUrl || !duration) {
       return NextResponse.json(
         {
-          error: 'All fields (id, name, type, imageUrl, duration) are required',
+          error: 'All fields (name, type, imageUrl, duration) are required',
         },
         { status: 400 },
       );
@@ -38,7 +37,6 @@ export async function POST(request: Request) {
 
     // Create a new farmer document
     const newFarmer = await FarmerForm.create({
-      id,
       name,
       type,
       imageUrl,

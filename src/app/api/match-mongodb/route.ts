@@ -2,38 +2,45 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { connectMongoDB } from '@/lib/mongodb';
 import FarmerForm from '@/model/farmerForm';
-import YouthForm from '@/model/youthForm';
 
-export async function GET() {
+export async function POST(request: Request) {
   try {
     // Connect to MongoDB
     await connectMongoDB();
 
-    // Fetch farmer and youth data from their respective collections
-    const farmerData = await FarmerForm.find({});
-    const youthData = await YouthForm.find({});
+    // Parse the request body to get youth input data
+    const body = await request.json();
 
-    // Validate if data exists
-    if (farmerData.length === 0 || youthData.length === 0) {
+    const { name, skills, location, availability } = body;
+
+    if (!name || !skills || !location || !availability) {
       return NextResponse.json(
-        { error: 'No data available for matching', matches: [] },
+        {
+          error:
+            'All fields (name, skills, location, availability) are required',
+        },
+        { status: 400 },
+      );
+    }
+
+    // Fetch all farmer data
+    const farmerData = await FarmerForm.find({});
+
+    // Transform MongoDB _id field to id for compatibility
+    const formattedFarmerData = farmerData.map((farmer) => ({
+      ...farmer.toObject(),
+      id: farmer._id,
+    }));
+
+    if (formattedFarmerData.length === 0) {
+      return NextResponse.json(
+        { error: 'No farmers available for matching' },
         { status: 400 },
       );
     }
 
     // Prepare the prompt for OpenAI API
-    const prompt = `
-      Match farmers and youths based on their requirements and capabilities.
-      Only provide the output as a JSON array in the following format, without any additional text or explanation:
-
-      [
-        { "farmer": "<farmer_id>", "youth": "<youth_id>" },
-        ...
-      ]
-
-      Farmers: ${JSON.stringify(farmerData)}
-      Youths: ${JSON.stringify(youthData)}
-    `;
+    const prompt = `Match the following youth input with the most suitable farmers based on their requirements and capabilities.\n\nOnly provide the farmer's _id that best matches the youth input. Provide the output as a JSON array in the following format:\n\n[\n  { "farmer": "<farmer_id>", "youth": "<youth_name>" },\n  ...\n]\n\nYouth: ${JSON.stringify({ name, skills, location, availability })}\nFarmers: ${JSON.stringify(formattedFarmerData)}`;
 
     // Call OpenAI API to process the matching
     const openAiResponse = await axios.post(
@@ -56,6 +63,11 @@ export async function GET() {
           'Content-Type': 'application/json',
         },
       },
+    );
+
+    console.log(
+      'OpenAI Response:',
+      openAiResponse.data.choices?.[0]?.message?.content,
     );
 
     let matches = openAiResponse.data.choices?.[0]?.message?.content?.trim();
@@ -86,8 +98,19 @@ export async function GET() {
       );
     }
 
+    // Fetch farmer details from MongoDB using the matched ids
+    const matchedFarmers = await Promise.all(
+      parsedMatches.map(async (match) => {
+        const farmer = await FarmerForm.findById(match.farmer);
+        return farmer ? { farmer, youth: match.youth } : null;
+      }),
+    );
+
+    // Filter out any null results (in case some farmers were not found)
+    const validMatches = matchedFarmers.filter((item) => item !== null);
+
     // Return the matched data
-    return NextResponse.json({ matches: parsedMatches });
+    return NextResponse.json({ matches: validMatches });
   } catch (error) {
     console.error('Error matching data:', error);
     return NextResponse.json(
