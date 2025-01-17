@@ -1,15 +1,13 @@
-import FarmerForm from '@/app/match/farmer/_components/FarmerForm';
 import { connectMongoDB } from '@/lib/mongodb';
+import FarmerForm, { IFarmerForm } from '@/model/farmerForm';
 import { NextResponse } from 'next/server';
 
-// GET: Fetch all farmer data
 export async function GET() {
   try {
-    // Connect to MongoDB
     await connectMongoDB();
 
     // Fetch all documents from the farmerForm collection
-    const farmers = await FarmerForm.find({});
+    const farmers: IFarmerForm[] = await FarmerForm.find({});
 
     return NextResponse.json({ farmers }, { status: 200 });
   } catch (error) {
@@ -21,16 +19,13 @@ export async function GET() {
   }
 }
 
-// POST: Add new farmer data
 export async function POST(request: Request) {
   try {
-    // Connect to MongoDB
     await connectMongoDB();
 
     // Parse the JSON body from the request
     const body = await request.json();
 
-    // Validate required fields
     const { id, name, type, imageUrl, duration } = body;
     if (!id || !name || !type || !imageUrl || !duration) {
       return NextResponse.json(
