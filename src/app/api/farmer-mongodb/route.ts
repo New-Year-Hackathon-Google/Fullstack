@@ -23,7 +23,6 @@ export async function POST(request: Request) {
   try {
     await connectMongoDB();
 
-    // Parse the JSON body from the request
     const body = await request.json();
 
     const { name, type, imageUrl, duration } = body;

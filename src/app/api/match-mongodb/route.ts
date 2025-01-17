@@ -2,37 +2,55 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { connectMongoDB } from '@/lib/mongodb';
 import FarmerForm from '@/model/farmerForm';
-import YouthForm from '@/model/youthForm';
 
-export async function GET() {
+export async function POST(request: Request) {
   try {
     // Connect to MongoDB
     await connectMongoDB();
 
-    // Fetch farmer and youth data from their respective collections
-    const farmerData = await FarmerForm.find({});
-    const youthData = await YouthForm.find({});
+    // Parse the request body to get youth input data
+    const body = await request.json();
 
-    // Validate if data exists
-    if (farmerData.length === 0 || youthData.length === 0) {
+    const { name, skills, location, availability } = body;
+
+    if (!name || !skills || !location || !availability) {
       return NextResponse.json(
-        { error: 'No data available for matching', matches: [] },
+        {
+          error:
+            'All fields (name, skills, location, availability) are required',
+        },
+        { status: 400 },
+      );
+    }
+
+    // Fetch all farmer data
+    const farmerData = await FarmerForm.find({});
+
+    // Transform MongoDB _id field to id for compatibility
+    const formattedFarmerData = farmerData.map((farmer) => ({
+      ...farmer.toObject(),
+      id: farmer._id,
+    }));
+
+    if (formattedFarmerData.length === 0) {
+      return NextResponse.json(
+        { error: 'No farmers available for matching' },
         { status: 400 },
       );
     }
 
     // Prepare the prompt for OpenAI API
     const prompt = `
-      Match farmers and youths based on their requirements and capabilities.
+      Match the following youth input with the most suitable farmers based on their requirements and capabilities.
       Only provide the output as a JSON array in the following format, without any additional text or explanation:
 
       [
-        { "farmer": "<farmer_id>", "youth": "<youth_id>" },
+        { "farmer": "<farmer_id>", "youth": "<youth_name>" },
         ...
       ]
 
-      Farmers: ${JSON.stringify(farmerData)}
-      Youths: ${JSON.stringify(youthData)}
+      Youth: ${JSON.stringify({ name, skills, location, availability })}
+      Farmers: ${JSON.stringify(formattedFarmerData)}
     `;
 
     // Call OpenAI API to process the matching
