@@ -8,7 +8,6 @@ export interface IFarmerForm extends Document {
   duration: string;
 }
 
-// Define the schema
 const farmerFormSchema = new Schema<IFarmerForm>(
   {
     id: { type: String, required: true },
