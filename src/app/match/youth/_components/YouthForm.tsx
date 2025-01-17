@@ -1,9 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import useYouthStore from '@/store/youthStore';
 
 export default function YouthForm() {
+  const { setYouthData } = useYouthStore();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     skills: '',
@@ -12,7 +15,7 @@ export default function YouthForm() {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData({
       ...formData,
@@ -23,18 +26,11 @@ export default function YouthForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      await axios.post('/api/youth-mongodb', formData);
-      alert('Youth form submitted successfully!');
-      setFormData({
-        name: '',
-        skills: '',
-        location: '',
-        availability: '',
-      });
-    } catch (error) {
-      console.error('Error submitting youth form:', error);
-    }
+    // Set data to Zustand store
+    setYouthData(formData);
+
+    // Redirect to match result page
+    router.push('/match');
   };
 
   return (
@@ -63,12 +59,12 @@ export default function YouthForm() {
           <label className='mb-1 block text-sm font-medium text-gray-700'>
             Skills
           </label>
-          <input
+          <textarea
             name='skills'
             value={formData.skills}
             onChange={handleChange}
             className='w-full rounded border-gray-300 p-2 text-gray-900 focus:border-green-500 focus:ring-green-500'
-            placeholder='Enter your skills'
+            placeholder='Enter your skills (e.g., harvesting, packaging)'
             required
           />
         </div>

@@ -1,7 +1,6 @@
 import { Schema, model, models, Model, Document } from 'mongoose';
 
 export interface IFarmerForm extends Document {
-  id: string;
   name: string;
   type: string;
   imageUrl: string;
@@ -10,7 +9,6 @@ export interface IFarmerForm extends Document {
 
 const farmerFormSchema = new Schema<IFarmerForm>(
   {
-    id: { type: String, required: true },
     name: { type: String, required: true },
     type: { type: String, required: true },
     imageUrl: { type: String, required: true },

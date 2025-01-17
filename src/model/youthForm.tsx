@@ -1,7 +1,6 @@
 import { Schema, model, models, Model, Document } from 'mongoose';
 
 export interface IYouthForm extends Document {
-  id: string;
   name: string;
   skills: string[];
   location: string;
@@ -10,7 +9,6 @@ export interface IYouthForm extends Document {
 
 const youthFormSchema = new Schema<IYouthForm>(
   {
-    id: { type: String, required: true },
     name: { type: String, required: true },
     skills: { type: [String], required: true },
     location: { type: String, required: true },
