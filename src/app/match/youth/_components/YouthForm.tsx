@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import useYouthStore from '@/store/youthStore';
+import useYouthStore from '@/store/useYouthStore';
 
 export default function YouthForm() {
   const { setYouthData } = useYouthStore();

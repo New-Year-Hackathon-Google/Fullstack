@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import useYouthStore from '@/store/youthStore';
+import useYouthStore from '@/store/useYouthStore';
 
 export default function MatchingResult() {
   const { name, skills, location, availability } = useYouthStore();
