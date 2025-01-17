@@ -4,16 +4,28 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import useYouthStore from '@/store/useYouthStore';
 
+interface Farmer {
+  name: string;
+  type: string;
+  imageUrl: string;
+  duration: string;
+}
+
+interface Match {
+  farmer: Farmer;
+  youth: string;
+}
+
 export default function MatchingResult() {
   const { name, skills, location, availability } = useYouthStore();
-  const [matches, setMatches] = useState([]);
+  const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const response = await axios.post('/api/match', {
+        const response = await axios.post('/api/match-mongodb', {
           name,
           skills,
           location,
@@ -44,14 +56,22 @@ export default function MatchingResult() {
             {matches.map((match, index) => (
               <li
                 key={index}
-                className='flex items-center justify-between rounded-lg bg-gray-100 p-4 shadow-sm hover:bg-gray-200'
+                className='flex items-center space-x-4 rounded-lg bg-gray-100 p-4 shadow-sm hover:bg-gray-200'
               >
+                <img
+                  src={match.farmer.imageUrl}
+                  alt={match.farmer.name}
+                  className='h-16 w-16 rounded-full object-cover'
+                />
                 <div>
                   <p className='text-lg font-semibold text-gray-700'>
-                    Farmer ID: {match.farmer}
+                    {match.farmer.name}
                   </p>
                   <p className='text-sm text-gray-500'>
-                    Matched for Youth: {match.youth}
+                    Help Needed: {match.farmer.type}
+                  </p>
+                  <p className='text-sm text-gray-500'>
+                    Duration: {match.farmer.duration}
                   </p>
                 </div>
               </li>

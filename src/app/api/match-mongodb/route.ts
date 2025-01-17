@@ -40,18 +40,7 @@ export async function POST(request: Request) {
     }
 
     // Prepare the prompt for OpenAI API
-    const prompt = `
-      Match the following youth input with the most suitable farmers based on their requirements and capabilities.
-      Only provide the output as a JSON array in the following format, without any additional text or explanation:
-
-      [
-        { "farmer": "<farmer_id>", "youth": "<youth_name>" },
-        ...
-      ]
-
-      Youth: ${JSON.stringify({ name, skills, location, availability })}
-      Farmers: ${JSON.stringify(formattedFarmerData)}
-    `;
+    const prompt = `Match the following youth input with the most suitable farmers based on their requirements and capabilities.\n\nOnly provide the farmer's _id that best matches the youth input. Provide the output as a JSON array in the following format:\n\n[\n  { "farmer": "<farmer_id>", "youth": "<youth_name>" },\n  ...\n]\n\nYouth: ${JSON.stringify({ name, skills, location, availability })}\nFarmers: ${JSON.stringify(formattedFarmerData)}`;
 
     // Call OpenAI API to process the matching
     const openAiResponse = await axios.post(
@@ -74,6 +63,11 @@ export async function POST(request: Request) {
           'Content-Type': 'application/json',
         },
       },
+    );
+
+    console.log(
+      'OpenAI Response:',
+      openAiResponse.data.choices?.[0]?.message?.content,
     );
 
     let matches = openAiResponse.data.choices?.[0]?.message?.content?.trim();
@@ -104,8 +98,19 @@ export async function POST(request: Request) {
       );
     }
 
+    // Fetch farmer details from MongoDB using the matched ids
+    const matchedFarmers = await Promise.all(
+      parsedMatches.map(async (match) => {
+        const farmer = await FarmerForm.findById(match.farmer);
+        return farmer ? { farmer, youth: match.youth } : null;
+      }),
+    );
+
+    // Filter out any null results (in case some farmers were not found)
+    const validMatches = matchedFarmers.filter((item) => item !== null);
+
     // Return the matched data
-    return NextResponse.json({ matches: parsedMatches });
+    return NextResponse.json({ matches: validMatches });
   } catch (error) {
     console.error('Error matching data:', error);
     return NextResponse.json(

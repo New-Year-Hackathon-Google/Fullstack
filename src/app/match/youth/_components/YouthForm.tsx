@@ -26,11 +26,9 @@ export default function YouthForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Set data to Zustand store
     setYouthData(formData);
 
-    // Redirect to match result page
-    router.push('/match');
+    router.push('/match/result');
   };
 
   return (
