@@ -4,7 +4,7 @@ import MobileDropdown from './MobileDropdown';
 const navItems = [
   { title: '홈', href: '/' },
   { title: '소개', href: '/about' },
-  { title: '서비스', href: '/service' },
+  { title: '서비스', href: '/guardian' },
 ];
 
 const Navbar = () => {

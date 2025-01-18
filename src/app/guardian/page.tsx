@@ -13,7 +13,7 @@ import {
 
 type StatusType = '안정적' | '주의' | '위험';
 
-const PatientDashboard = () => {
+export default function PatientDashboard() {
   const patientInfo = {
     name: '김영희',
     dateOfBirth: 670327,
@@ -222,6 +222,4 @@ const PatientDashboard = () => {
       </div>
     </div>
   );
-};
-
-export default PatientDashboard;
+}
