@@ -24,7 +24,7 @@ const patientSchema = new Schema<IPatient>(
   },
 );
 
-const Patient: Model<IPatient> =
-  models.Patient || model<IPatient>('Patient', patientSchema);
+const Patient =
+  models.PatientModel || model<IPatient>('PatientModel', patientSchema);
 
 export default Patient;

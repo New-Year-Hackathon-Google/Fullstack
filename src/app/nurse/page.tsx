@@ -27,6 +27,7 @@ const NurseDashboard = () => {
     try {
       const response = await axios.get<Patient[]>('/api/patientList-mongodb');
       setPatients(response.data);
+      console.log('get 성공!! 환자 리스트들', response.data);
     } catch (error) {
       console.error('Error fetching patient data:', error);
     }
