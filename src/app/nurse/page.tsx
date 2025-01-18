@@ -34,7 +34,6 @@ const NurseDashboard = () => {
 
       console.log('환자 리스트 가져오기 성공!!!', response.data);
 
-      // response.data.data에서 배열만 추출
       if (response.data.success && Array.isArray(response.data.data)) {
         setPatients(response.data.data);
         console.log('환자 리스트:', response.data.data);
@@ -47,36 +46,61 @@ const NurseDashboard = () => {
   };
 
   return (
-    <div className='min-h-screen bg-gray-100 p-6'>
-      <h1 className='mb-4 text-2xl font-bold text-gray-800'>간호사 대시보드</h1>
-      <div className='rounded-lg bg-white p-4 shadow-md'>
-        <h2 className='mb-3 text-lg font-semibold'>환자 리스트</h2>
-        <table className='w-full table-auto'>
+    <div className='min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-6'>
+      <h1 className='mb-6 text-3xl font-bold text-blue-800'>간호사 대시보드</h1>
+      <div className='rounded-lg bg-white p-6 shadow-lg'>
+        <h2 className='mb-4 text-xl font-semibold text-blue-700'>
+          환자 리스트
+        </h2>
+        <table className='w-full table-auto border-collapse overflow-hidden rounded-lg shadow-sm'>
           <thead>
-            <tr className='bg-gray-200 text-gray-700'>
-              <th className='p-2'>ID</th>
-              <th className='p-2'>이름</th>
-              <th className='p-2'>생년월일</th>
-              <th className='p-2'>병실 번호</th>
-              <th className='p-2'>입원 날짜</th>
-              <th className='p-2'>혈액형</th>
-              <th className='p-2'>담당 간호사</th>
-              <th className='p-2'>몸무게(kg)</th>
-              <th className='p-2'>키(cm)</th>
+            <tr className='bg-blue-200 text-blue-800'>
+              <th className='p-3 text-left'>ID</th>
+              <th className='p-3 text-left'>이름</th>
+              <th className='p-3 text-left'>생년월일</th>
+              <th className='p-3 text-left'>병실 번호</th>
+              <th className='p-3 text-left'>입원 날짜</th>
+              <th className='p-3 text-left'>혈액형</th>
+              <th className='p-3 text-left'>담당 간호사</th>
+              <th className='p-3 text-left'>몸무게(kg)</th>
+              <th className='p-3 text-left'>키(cm)</th>
             </tr>
           </thead>
           <tbody>
-            {patients.map((patient) => (
-              <tr key={patient.id} className='border-b'>
-                <td className='p-2 text-center'>{patient.id}</td>
-                <td className='p-2 text-center'>{patient.name}</td>
-                <td className='p-2 text-center'>{patient.dateOfBirth}</td>
-                <td className='p-2 text-center'>{patient.roomNumber}</td>
-                <td className='p-2 text-center'>{patient.entryDate}</td>
-                <td className='p-2 text-center'>{patient.bloodType}</td>
-                <td className='p-2 text-center'>{patient.nurseName}</td>
-                <td className='p-2 text-center'>{patient.weight}</td>
-                <td className='p-2 text-center'>{patient.height}</td>
+            {patients.map((patient, index) => (
+              <tr
+                key={patient.id}
+                className={`${
+                  index % 2 === 0 ? 'bg-blue-50' : 'bg-white'
+                } transition-colors hover:bg-blue-100`}
+              >
+                <td className='border-b border-gray-200 p-3 text-center'>
+                  {patient.id}
+                </td>
+                <td className='border-b border-gray-200 p-3 text-center'>
+                  {patient.name}
+                </td>
+                <td className='border-b border-gray-200 p-3 text-center'>
+                  {patient.dateOfBirth}
+                </td>
+                <td className='border-b border-gray-200 p-3 text-center'>
+                  {patient.roomNumber}
+                </td>
+                <td className='border-b border-gray-200 p-3 text-center'>
+                  {patient.entryDate}
+                </td>
+                <td className='border-b border-gray-200 p-3 text-center'>
+                  {patient.bloodType}
+                </td>
+                <td className='border-b border-gray-200 p-3 text-center'>
+                  {patient.nurseName}
+                </td>
+                <td className='border-b border-gray-200 p-3 text-center'>
+                  {patient.weight}
+                </td>
+                <td className='border-b border-gray-200 p-3 text-center'>
+                  {patient.height}
+                </td>
               </tr>
             ))}
           </tbody>
