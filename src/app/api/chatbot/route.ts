@@ -17,7 +17,8 @@ export async function POST(req: NextRequest) {
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
     // Prompt를 추가적으로 강화하는 부분 (필요 시 변경)
-    const enhancedPrompt = `This is an intelligent AI chatbot designed to answer caregivers' questions about patients in nursing homes. The chatbot provides smart responses in Korean to questions about patients' symptoms, medications, and illnesses.`;
+    const enhancedPrompt =
+      "This is an intelligent AI chatbot designed to answer caregivers' questions about patients in nursing homes. The chatbot provides smart responses in Korean to questions about patients' symptoms, medications, and illnesses. Do not use ** or any other MDX syntax.";
 
     const result = await model.generateContent(enhancedPrompt);
     const response = await result.response;

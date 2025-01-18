@@ -22,9 +22,11 @@ const AddPatientModal = ({
     roomNumber: 0,
     bloodType: '',
     nurseName: '',
+    entryDate: new Date().toISOString().split('T')[0], // 기본값: 오늘 날짜
   });
   const [error, setError] = useState('');
 
+  // 입력값 변경 핸들러
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -38,13 +40,34 @@ const AddPatientModal = ({
     }));
   };
 
+  // 제출 핸들러
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) {
+      setError('인증 토큰이 없습니다. 다시 로그인 해주세요.');
+      return;
+    }
+
     try {
-      const response = await axios.post('/api/patients', formData);
+      // 서버 요구 사항에 맞는 데이터 매핑
+      const requestData = {
+        ...formData,
+        bloodType: formData.bloodType
+          .replace('+', '_plus')
+          .replace('-', '_minus'), // 혈액형 매핑
+      };
+
+      const response = await axios.post('/api/patients', requestData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // accessToken 추가
+        },
+      });
 
       console.log('New patient added:', response.data);
-      onPatientAdded(); // 부모 컴포넌트의 데이터 업데이트 트리거
+      onPatientAdded(); // 부모 컴포넌트에서 데이터 갱신
       onClose();
     } catch (err) {
       console.error('Error adding patient:', err);
@@ -77,6 +100,17 @@ const AddPatientModal = ({
               type='date'
               name='dateOfBirth'
               value={formData.dateOfBirth}
+              onChange={handleChange}
+              className='w-full rounded border p-2'
+              required
+            />
+          </div>
+          <div className='mb-3'>
+            <label className='block text-sm font-medium'>입원 날짜</label>
+            <input
+              type='date'
+              name='entryDate'
+              value={formData.entryDate}
               onChange={handleChange}
               className='w-full rounded border p-2'
               required

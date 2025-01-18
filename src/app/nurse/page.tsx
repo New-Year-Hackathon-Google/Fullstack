@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import AddPatientModal from './_components/AddPatientModal';
 
 interface Patient {
   id: number;
@@ -17,6 +18,7 @@ interface Patient {
 
 const NurseDashboard = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchPatients();
@@ -25,33 +27,48 @@ const NurseDashboard = () => {
   const fetchPatients = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-
       const response = await axios.get('/api/patients', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
 
-      console.log('환자 리스트 가져오기 성공!!!', response.data);
-
       if (response.data.success && Array.isArray(response.data.data)) {
         setPatients(response.data.data);
-        console.log('환자 리스트:', response.data.data);
       } else {
-        console.error('응답 데이터 형식이 잘못되었습니다:', response.data);
+        console.error('Invalid response format:', response.data);
       }
     } catch (error) {
       console.error('Error fetching patient data:', error);
     }
   };
 
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handlePatientAdded = () => {
+    fetchPatients(); // 새 환자가 추가된 후 리스트 업데이트
+    setIsModalOpen(false);
+  };
+
   return (
     <div className='min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-6'>
       <h1 className='mb-6 text-3xl font-bold text-blue-800'>간호사 대시보드</h1>
       <div className='rounded-lg bg-white p-6 shadow-lg'>
-        <h2 className='mb-4 text-xl font-semibold text-blue-700'>
-          환자 리스트
-        </h2>
+        <div className='mb-4 flex items-center justify-between'>
+          <h2 className='text-xl font-semibold text-blue-700'>환자 리스트</h2>
+          <button
+            onClick={handleModalOpen}
+            className='rounded bg-blue-500 px-4 py-2 text-white shadow hover:bg-blue-600'
+          >
+            환자 추가
+          </button>
+        </div>
         <table className='w-full table-auto border-collapse overflow-hidden rounded-lg shadow-sm'>
           <thead>
             <tr className='bg-blue-200 text-blue-800'>
@@ -106,6 +123,13 @@ const NurseDashboard = () => {
           </tbody>
         </table>
       </div>
+
+      {/* 환자 추가 모달 */}
+      <AddPatientModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onPatientAdded={handlePatientAdded}
+      />
     </div>
   );
 };

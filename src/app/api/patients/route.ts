@@ -16,7 +16,7 @@ export async function GET(req: Request) {
     }
 
     const response = await axios.get(
-      'http://backya.duckdns.org:8080/api/v1/patients',
+      'https://dev.silver-bridge.kr/api/v1/patients',
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -49,8 +49,6 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { memberId, accessToken } = body;
 
-    console.log('멤버 테스트 아이디!!!', memberId);
-
     if (!memberId) {
       return new Response(JSON.stringify({ error: 'memberId is required' }), {
         status: 400,
@@ -58,7 +56,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const apiUrl = `http://backya.duckdns.org:8080/api/v1/patients/member`;
+    const apiUrl = `https://dev.silver-bridge.kr/api/v1/patients/member`;
 
     // POST 요청으로 memberId 전달
     const response = await axios.post(

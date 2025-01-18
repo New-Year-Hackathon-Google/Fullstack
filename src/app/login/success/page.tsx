@@ -18,8 +18,6 @@ export default function SuccessPage() {
           return;
         }
 
-        console.log('토큰 테스트@@@@@@@@@', accessToken);
-
         localStorage.setItem('accessToken', accessToken);
 
         const res = await axios.get(

@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const apiUrl = `http://backya.duckdns.org:8080/api/v1/healthStatus`;
+    const apiUrl = `https://dev.silver-bridge.kr/api/v1/healthStatus`;
 
     // POST 요청으로 patientId 전달
     const response = await axios.post(
