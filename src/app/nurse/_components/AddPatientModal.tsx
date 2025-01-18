@@ -14,23 +14,41 @@ const AddPatientModal = ({
 }: AddPatientModalProps) => {
   const [name, setName] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
   const [bloodType, setBloodType] = useState('');
   const [status, setStatus] = useState('');
   const [nurseName, setNurseName] = useState('');
   const [error, setError] = useState('');
 
+  const generatePatientId = (birthDate: string) => {
+    const currentDate = new Date();
+    const formattedDate = currentDate
+      .toISOString()
+      .slice(0, 10)
+      .replace(/-/g, ''); // 현재 날짜를 YYYYMMDD 형식으로 변환
+    const birthDigits = birthDate.replace(/-/g, '').slice(2, 8); // 주민번호 앞자리처럼 생년월일에서 YYMMDD 추출
+    return `${formattedDate}-${birthDigits}`; // 조합: YYYYMMDD-YYMMDD
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const patientId = generatePatientId(dateOfBirth); // patientId 생성
+
       const response = await axios.post('/api/patientList-mongodb', {
+        patientId,
         name,
         dateOfBirth,
-        roomNumber: Number(roomNumber), // Convert to number for consistency with the model
+        height,
+        weight,
+        roomNumber,
         bloodType,
         status,
         nurseName,
       });
+
       console.log('New patient added:', response.data);
       onPatientAdded();
       onClose();
@@ -64,6 +82,26 @@ const AddPatientModal = ({
               type='date'
               value={dateOfBirth}
               onChange={(e) => setDateOfBirth(e.target.value)}
+              className='w-full rounded border p-2'
+              required
+            />
+          </div>
+          <div className='mb-3'>
+            <label className='block text-sm font-medium'>키 (cm)</label>
+            <input
+              type='text'
+              value={height}
+              onChange={(e) => setHeight(e.target.value)}
+              className='w-full rounded border p-2'
+              required
+            />
+          </div>
+          <div className='mb-3'>
+            <label className='block text-sm font-medium'>몸무게 (kg)</label>
+            <input
+              type='text'
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}
               className='w-full rounded border p-2'
               required
             />

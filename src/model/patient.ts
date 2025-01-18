@@ -1,11 +1,12 @@
-import { Schema, model, models, Model, Document } from 'mongoose';
+import { Schema, model, models, Document } from 'mongoose';
 
 export interface IPatient extends Document {
+  patientId: string;
   name: string;
   dateOfBirth: string;
   height: string;
   weight: string;
-  roomNumber: number;
+  roomNumber: string;
   bloodType: string;
   status: string;
   nurseName: string;
@@ -13,11 +14,12 @@ export interface IPatient extends Document {
 
 const patientSchema = new Schema<IPatient>(
   {
+    patientId: { type: String, required: true },
     name: { type: String, required: true },
     dateOfBirth: { type: String, required: true },
     height: { type: String, required: true },
     weight: { type: String, required: true },
-    roomNumber: { type: Number, required: true },
+    roomNumber: { type: String, required: true },
     bloodType: { type: String, required: true },
     status: { type: String, required: true },
     nurseName: { type: String, required: true },

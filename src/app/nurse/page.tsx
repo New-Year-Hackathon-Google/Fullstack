@@ -6,7 +6,7 @@ import AddPatientModal from './_components/AddPatientModal';
 import Link from 'next/link';
 
 interface Patient {
-  _id: string;
+  patientId: string;
   name: string;
   height: string;
   weight: string;
@@ -51,6 +51,7 @@ const NurseDashboard = () => {
         <table className='w-full table-auto'>
           <thead>
             <tr className='bg-gray-200 text-gray-700'>
+              <th className='p-2'>환자 ID</th>
               <th className='p-2'>이름</th>
               <th className='p-2'>생년월일</th>
               <th className='p-2'>키(cm)</th>
@@ -62,19 +63,20 @@ const NurseDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {patients.map((patient) => (
-              <tr key={patient._id} className='border-b'>
+            {patients.map((patient, index) => (
+              <tr key={patient.patientId || index} className='border-b'>
                 <td className='p-2 text-center'>
-                  <Link href={`/patient/${patient._id}`}>
+                  <Link href={`/patient/${patient.patientId}`}>
                     <div className='text-blue-500 hover:underline'>
-                      {patient.name}
+                      {patient.patientId}
                     </div>
                   </Link>
                 </td>
+                <td className='p-2 text-center'>{patient.name}</td>
                 <td className='p-2 text-center'>{patient.dateOfBirth}</td>
-                <td className='p-2 text-center'>{patient.roomNumber}</td>
                 <td className='p-2 text-center'>{patient.height}</td>
                 <td className='p-2 text-center'>{patient.weight}</td>
+                <td className='p-2 text-center'>{patient.roomNumber}</td>
                 <td className='p-2 text-center'>{patient.bloodType}</td>
                 <td className='p-2 text-center'>{patient.status}</td>
                 <td className='p-2 text-center'>{patient.nurseName}</td>

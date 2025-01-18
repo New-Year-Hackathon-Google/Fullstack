@@ -24,7 +24,10 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
+    console.log('테스트@@@@@@@@@@@@@', body);
+
     const {
+      patientId,
       name,
       dateOfBirth,
       height,
@@ -35,6 +38,7 @@ export async function POST(request: Request) {
       nurseName,
     } = body;
     if (
+      !patientId ||
       !name ||
       !dateOfBirth ||
       !height ||
@@ -47,15 +51,18 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error:
-            'All fields (name, dateOfBirth, roomNumber, bloodType, status, nurseName) are required',
+            'All fields (patientId, name, dateOfBirth, height, weight, roomNumber, bloodType, status, nurseName) are required',
         },
         { status: 400 },
       );
     }
 
     const newPatient = await Patient.create({
+      patientId,
       name,
       dateOfBirth,
+      height,
+      weight,
       roomNumber,
       bloodType,
       status,

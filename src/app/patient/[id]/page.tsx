@@ -1,6 +1,5 @@
 'use client';
-
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import axios from 'axios';
 
@@ -11,8 +10,6 @@ export default function PatientDetailedPage() {
 
   const [formData, setFormData] = useState({
     patientId: patientId || '',
-    height: '',
-    weight: '',
     heartRate: '',
     bloodPressure: '',
     bloodSugar: '',
@@ -25,48 +22,6 @@ export default function PatientDetailedPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  // 데이터 가져오기
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!patientId) {
-        setError('Patient ID is missing in the URL.');
-        return;
-      }
-
-      setLoading(true);
-
-      try {
-        const response = await axios.get(
-          `/api/healthRecord-mongodb/${patientId}`,
-        );
-        const data = response.data.record;
-
-        if (data) {
-          setFormData({
-            patientId: data.patientId || '',
-            height: data.height || '',
-            weight: data.weight || '',
-            heartRate: data.heartRate || '',
-            bloodPressure: data.bloodPressure || '',
-            bloodSugar: data.bloodSugar || '',
-            bodyTemperature: data.bodyTemperature || '',
-            pulse: data.pulse || '',
-            oxygenSaturation: data.oxygenSaturation || '',
-            additionalNotes: data.additionalNotes || '',
-            medications: (data.medications || []).join(', '), // 배열을 문자열로 변환
-          });
-        }
-      } catch (err) {
-        console.error('Error fetching health record:', err);
-        setError('Failed to fetch health record.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [patientId]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -104,28 +59,7 @@ export default function PatientDetailedPage() {
         onSubmit={handleSubmit}
         className='rounded-lg bg-white p-6 shadow-md'
       >
-        <div className='mb-4'>
-          <label className='block text-sm font-semibold'>Height (cm)</label>
-          <input
-            type='number'
-            name='height'
-            value={formData.height}
-            onChange={handleChange}
-            className='w-full rounded border px-3 py-2'
-            required
-          />
-        </div>
-        <div className='mb-4'>
-          <label className='block text-sm font-semibold'>Weight (kg)</label>
-          <input
-            type='number'
-            name='weight'
-            value={formData.weight}
-            onChange={handleChange}
-            className='w-full rounded border px-3 py-2'
-            required
-          />
-        </div>
+        {/* Heart Rate */}
         <div className='mb-4'>
           <label className='block text-sm font-semibold'>
             Heart Rate (bpm)
@@ -139,6 +73,8 @@ export default function PatientDetailedPage() {
             required
           />
         </div>
+
+        {/* Blood Pressure */}
         <div className='mb-4'>
           <label className='block text-sm font-semibold'>Blood Pressure</label>
           <input
@@ -151,7 +87,92 @@ export default function PatientDetailedPage() {
             required
           />
         </div>
-        {/* 나머지 필드들 동일 */}
+
+        {/* Blood Sugar */}
+        <div className='mb-4'>
+          <label className='block text-sm font-semibold'>
+            Blood Sugar (mg/dL)
+          </label>
+          <input
+            type='number'
+            name='bloodSugar'
+            value={formData.bloodSugar}
+            onChange={handleChange}
+            className='w-full rounded border px-3 py-2'
+            required
+          />
+        </div>
+
+        {/* Body Temperature */}
+        <div className='mb-4'>
+          <label className='block text-sm font-semibold'>
+            Body Temperature (°C)
+          </label>
+          <input
+            type='number'
+            name='bodyTemperature'
+            value={formData.bodyTemperature}
+            onChange={handleChange}
+            className='w-full rounded border px-3 py-2'
+            step='0.1'
+            required
+          />
+        </div>
+
+        {/* Pulse */}
+        <div className='mb-4'>
+          <label className='block text-sm font-semibold'>Pulse</label>
+          <input
+            type='number'
+            name='pulse'
+            value={formData.pulse}
+            onChange={handleChange}
+            className='w-full rounded border px-3 py-2'
+            required
+          />
+        </div>
+
+        {/* Oxygen Saturation */}
+        <div className='mb-4'>
+          <label className='block text-sm font-semibold'>
+            Oxygen Saturation (%)
+          </label>
+          <input
+            type='number'
+            name='oxygenSaturation'
+            value={formData.oxygenSaturation}
+            onChange={handleChange}
+            className='w-full rounded border px-3 py-2'
+            required
+          />
+        </div>
+
+        {/* Additional Notes */}
+        <div className='mb-4'>
+          <label className='block text-sm font-semibold'>
+            Additional Notes
+          </label>
+          <textarea
+            name='additionalNotes'
+            value={formData.additionalNotes}
+            onChange={handleChange}
+            className='w-full rounded border px-3 py-2'
+          />
+        </div>
+
+        {/* Medications */}
+        <div className='mb-4'>
+          <label className='block text-sm font-semibold'>Medications</label>
+          <input
+            type='text'
+            name='medications'
+            value={formData.medications}
+            onChange={handleChange}
+            className='w-full rounded border px-3 py-2'
+            placeholder='e.g., Aspirin, Vitamin D'
+          />
+        </div>
+
         <button
           type='submit'
           className='rounded bg-blue-500 px-4 py-2 text-white'

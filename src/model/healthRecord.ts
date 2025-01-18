@@ -1,8 +1,7 @@
 import { Schema, model, models, Model, Document } from 'mongoose';
 
 export interface IHealthRecord extends Document {
-  height: number; // 키 (cm)
-  weight: number; // 체중 (kg)
+  patientId: string; // 환자 ID
   heartRate: number; // 심박수
   bloodPressure: string; // 혈압 (ex: "120/80")
   bloodSugar: number; // 혈당 (mg/dL)
@@ -15,8 +14,7 @@ export interface IHealthRecord extends Document {
 
 const healthRecordSchema = new Schema<IHealthRecord>(
   {
-    height: { type: Number, required: true }, // 필수: 키
-    weight: { type: Number, required: true }, // 필수: 체중
+    patientId: { type: String, required: true }, // 필수: 환자 ID
     heartRate: { type: Number, required: true }, // 필수: 심박수
     bloodPressure: { type: String, required: true }, // 필수: 혈압
     bloodSugar: { type: Number, required: true }, // 필수: 혈당
