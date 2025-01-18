@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -17,7 +15,9 @@ const AddPatientModal = ({
   const [name, setName] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
+  const [bloodType, setBloodType] = useState('');
   const [status, setStatus] = useState('');
+  const [nurseName, setNurseName] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,8 +26,10 @@ const AddPatientModal = ({
       const response = await axios.post('/api/patientList-mongodb', {
         name,
         dateOfBirth,
-        roomNumber,
+        roomNumber: Number(roomNumber), // Convert to number for consistency with the model
+        bloodType,
         status,
+        nurseName,
       });
       console.log('New patient added:', response.data);
       onPatientAdded();
@@ -77,11 +79,42 @@ const AddPatientModal = ({
             />
           </div>
           <div className='mb-3'>
+            <label className='block text-sm font-medium'>혈액형</label>
+            <select
+              value={bloodType}
+              onChange={(e) => setBloodType(e.target.value)}
+              className='w-full rounded border p-2'
+              required
+            >
+              <option value='' disabled>
+                혈액형 선택
+              </option>
+              <option value='A+'>A+</option>
+              <option value='A-'>A-</option>
+              <option value='B+'>B+</option>
+              <option value='B-'>B-</option>
+              <option value='AB+'>AB+</option>
+              <option value='AB-'>AB-</option>
+              <option value='O+'>O+</option>
+              <option value='O-'>O-</option>
+            </select>
+          </div>
+          <div className='mb-3'>
             <label className='block text-sm font-medium'>상태</label>
             <input
               type='text'
               value={status}
               onChange={(e) => setStatus(e.target.value)}
+              className='w-full rounded border p-2'
+              required
+            />
+          </div>
+          <div className='mb-3'>
+            <label className='block text-sm font-medium'>담당 간호사</label>
+            <input
+              type='text'
+              value={nurseName}
+              onChange={(e) => setNurseName(e.target.value)}
               className='w-full rounded border p-2'
               required
             />

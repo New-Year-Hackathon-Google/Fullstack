@@ -3,13 +3,16 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import AddPatientModal from './_components/AddPatientModal';
+import Link from 'next/link';
 
 interface Patient {
   _id: string;
   name: string;
   dateOfBirth: string;
   roomNumber: number;
+  bloodType: string;
   status: string;
+  nurseName: string;
 }
 
 const NurseDashboard = () => {
@@ -48,16 +51,26 @@ const NurseDashboard = () => {
               <th className='p-2'>이름</th>
               <th className='p-2'>생년월일</th>
               <th className='p-2'>병실 번호</th>
+              <th className='p-2'>혈액형</th>
               <th className='p-2'>상태</th>
+              <th className='p-2'>담당 간호사</th>
             </tr>
           </thead>
           <tbody>
             {patients.map((patient) => (
               <tr key={patient._id} className='border-b'>
-                <td className='p-2 text-center'>{patient.name}</td>
+                <td className='p-2 text-center'>
+                  <Link href={`/patient/${patient._id}`}>
+                    <div className='text-blue-500 hover:underline'>
+                      {patient.name}
+                    </div>
+                  </Link>
+                </td>
                 <td className='p-2 text-center'>{patient.dateOfBirth}</td>
                 <td className='p-2 text-center'>{patient.roomNumber}</td>
+                <td className='p-2 text-center'>{patient.bloodType}</td>
                 <td className='p-2 text-center'>{patient.status}</td>
+                <td className='p-2 text-center'>{patient.nurseName}</td>
               </tr>
             ))}
           </tbody>

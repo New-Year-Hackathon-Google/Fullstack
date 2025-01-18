@@ -4,7 +4,9 @@ export interface IPatient extends Document {
   name: string;
   dateOfBirth: string;
   roomNumber: number;
+  bloodType: string;
   status: string;
+  nurseName: string;
 }
 
 const patientSchema = new Schema<IPatient>(
@@ -12,10 +14,12 @@ const patientSchema = new Schema<IPatient>(
     name: { type: String, required: true },
     dateOfBirth: { type: String, required: true },
     roomNumber: { type: Number, required: true },
+    bloodType: { type: String, required: true },
     status: { type: String, required: true },
+    nurseName: { type: String, required: true },
   },
   {
-    collection: 'SilverBridge',
+    collection: 'Patients',
     timestamps: true,
   },
 );

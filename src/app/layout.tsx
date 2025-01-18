@@ -14,9 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Connecting Farmers with Young Talent',
-  description:
-    'A platform fostering collaboration between farmers and young professionals, empowering local agriculture.',
+  title: 'SilverBridge',
+  description: 'SilverBridge, a hospital management system.',
 };
 
 export default function RootLayout({
