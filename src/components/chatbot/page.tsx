@@ -42,9 +42,9 @@ export default function Chatbot() {
     <div className='fixed bottom-4 right-4 z-50'>
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className='rounded-full bg-blue-500 p-3 text-white shadow-lg transition hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300'
+        className='rounded-full bg-blue-500 p-8 text-white shadow-lg transition hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300'
       >
-        {isOpen ? '닫기' : '채팅'}
+        {isOpen ? '닫기' : 'AI 챗봇'}
       </button>
 
       {isOpen && (
