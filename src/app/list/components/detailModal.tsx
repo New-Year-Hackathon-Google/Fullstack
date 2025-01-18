@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   Activity,
   Heart,
@@ -26,25 +26,13 @@ const historyEx = {
 };
 
 const DetailModal = () => {
-  const pathname = usePathname(); // 현재 URL 경로 가져오기
+  const pathname = usePathname();
   const patientId = Number(pathname.split('/').pop());
 
-  const {
-    data: history,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: history } = useQuery({
+    queryKey: [patientId],
     queryFn: () => GetHistory(patientId),
-    queryKey: ['history', patientId],
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error occurred while fetching data</div>;
-  }
 
   const VitalSignCard = ({
     icon: Icon,

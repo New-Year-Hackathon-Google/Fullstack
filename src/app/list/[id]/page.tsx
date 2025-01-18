@@ -18,22 +18,10 @@ function List() {
   const pathname = usePathname(); // 현재 URL 경로 가져오기
   const patientId = Number(pathname.split('/').pop());
 
-  const {
-    data: history,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: history } = useQuery({
+    queryKey: [patientId],
     queryFn: () => GetHistory(patientId),
-    queryKey: ['history', patientId],
   });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error occurred while fetching data</div>;
-  }
 
   return (
     <div className='relative'>
