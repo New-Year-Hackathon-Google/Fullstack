@@ -2,34 +2,44 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import AddPatientModal from './_components/AddPatientModal';
 
 interface Patient {
-  id: string;
+  _id: string;
   name: string;
   dateOfBirth: string;
-  roomNumber: string;
+  roomNumber: number;
   status: string;
 }
 
-const NurseDashboard: React.FC = () => {
+const NurseDashboard = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const fetchPatients = async () => {
-      try {
-        const response = await axios.get<Patient[]>('/api/patients');
-        setPatients(response.data);
-      } catch (error) {
-        console.error('Error fetching patient data:', error);
-      }
-    };
-
     fetchPatients();
   }, []);
+
+  const fetchPatients = async () => {
+    try {
+      const response = await axios.get<Patient[]>('/api/patientList-mongodb');
+      setPatients(response.data);
+    } catch (error) {
+      console.error('Error fetching patient data:', error);
+    }
+  };
 
   return (
     <div className='min-h-screen bg-gray-100 p-6'>
       <h1 className='mb-4 text-2xl font-bold text-gray-800'>간호사 대시보드</h1>
+      <div className='mb-4 flex justify-end'>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className='rounded bg-blue-500 px-4 py-2 text-white'
+        >
+          새로운 환자 추가
+        </button>
+      </div>
       <div className='rounded-lg bg-white p-4 shadow-md'>
         <h2 className='mb-3 text-lg font-semibold'>환자 리스트</h2>
         <table className='w-full table-auto'>
@@ -43,16 +53,21 @@ const NurseDashboard: React.FC = () => {
           </thead>
           <tbody>
             {patients.map((patient) => (
-              <tr key={patient.id} className='border-b'>
-                <td className='p-2'>{patient.name}</td>
-                <td className='p-2'>{patient.dateOfBirth}</td>
-                <td className='p-2'>{patient.roomNumber}</td>
-                <td className='p-2'>{patient.status}</td>
+              <tr key={patient._id} className='border-b'>
+                <td className='p-2 text-center'>{patient.name}</td>
+                <td className='p-2 text-center'>{patient.dateOfBirth}</td>
+                <td className='p-2 text-center'>{patient.roomNumber}</td>
+                <td className='p-2 text-center'>{patient.status}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <AddPatientModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onPatientAdded={fetchPatients}
+      />
     </div>
   );
 };
