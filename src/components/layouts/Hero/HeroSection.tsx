@@ -1,9 +1,14 @@
+'use client';
+
+import Chatbot from '@/components/chatbot/page';
 import { ArrowRight, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
 
 const HeroSection = () => {
   return (
     <div className='relative flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500'>
       {/* Overlay Pattern */}
+      <Chatbot />
       <div
         className='absolute inset-0 bg-black opacity-10'
         style={{
@@ -15,19 +20,24 @@ const HeroSection = () => {
       {/* Main Content */}
       <div className='relative z-10 px-4 text-center sm:px-6 lg:px-8'>
         <h1 className='animate-fade-in-up mb-6 text-4xl font-bold text-white sm:text-6xl'>
-          Welcome to the GDG Service
+          Welcome to our Silver Bridge Service
         </h1>
         <p className='mx-auto mb-8 max-w-2xl text-xl text-white/90 sm:text-2xl'>
-          Build something amazing with our GDG service. Start your journey today
-          and transform your ideas into reality.
+          We provide real-time updates on patients' conditions and support them
+          with AI technology by analyzing their current state, predicting
+          potential illnesses, and suggesting possible ways to improve their
+          health.
         </p>
 
         {/* CTA Buttons */}
         <div className='flex flex-row items-center justify-center gap-4'>
-          <button className='group flex items-center rounded-full bg-white px-8 py-3 font-semibold text-purple-600 transition-all duration-200 hover:bg-opacity-90'>
+          <Link
+            href='/guardian'
+            className='group flex items-center rounded-full bg-white px-8 py-3 font-semibold text-purple-600 transition-all duration-200 hover:bg-opacity-90'
+          >
             Get Started
             <ArrowRight className='ml-2 transition-transform group-hover:translate-x-1' />
-          </button>
+          </Link>
           <button className='rounded-full border-2 border-white bg-transparent px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-white/10'>
             Learn More
           </button>
