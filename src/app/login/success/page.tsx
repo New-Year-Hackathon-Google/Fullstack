@@ -20,14 +20,11 @@ export default function SuccessPage() {
 
         localStorage.setItem('accessToken', accessToken);
 
-        const res = await axios.get(
-          'https://dev.silver-bridge.kr/api/v1/member/me',
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
+        const res = await axios.get('/api/authInfo', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
           },
-        );
+        });
 
         localStorage.setItem('user', JSON.stringify(res.data));
 
