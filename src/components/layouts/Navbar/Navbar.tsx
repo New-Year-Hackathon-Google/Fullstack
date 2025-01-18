@@ -30,9 +30,12 @@ const Navbar = () => {
   return (
     <nav className='w-full bg-white px-4 shadow-md'>
       <div className='flex h-16 items-center justify-between'>
-        <div>
-          <Link href='/' className='text-xl font-bold text-gray-800'>
-            Logo
+        <div className=''>
+          <Link
+            href='/'
+            className='hidden text-xl font-bold text-emerald-500 sm:block'
+          >
+            Silver Bridge
           </Link>
         </div>
 
