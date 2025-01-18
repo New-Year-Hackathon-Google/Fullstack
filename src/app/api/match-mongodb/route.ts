@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 import { connectMongoDB } from '@/lib/mongodb';
-import FarmerForm from '@/model/farmerForm';
+import FarmerForm from '@/model/patient';
 
 export async function POST(request: Request) {
   try {
