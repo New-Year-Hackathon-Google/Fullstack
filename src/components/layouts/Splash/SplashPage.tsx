@@ -7,14 +7,14 @@ export default function SplashPage() {
   return (
     <div
       className='relative flex min-h-screen flex-col items-center justify-center bg-cover bg-center bg-no-repeat text-center'
-      style={{ backgroundImage: "url('/splashImage.png')" }} // 배경 이미지 설정
+      style={{ backgroundImage: "url('/splashImage.png')" }}
     >
       <Image
-        src='/logo.png' // 로고 이미지 경로
+        src='/logo.png'
         alt='Silver Bridge Logo'
-        width={80} // 로고 너비
-        height={80} // 로고 높이
-        className='mb-4' // 아래 여백
+        width={80}
+        height={80}
+        className='mb-4'
       />
 
       <h1 className='text-3xl font-bold text-emerald-500 sm:text-4xl'>

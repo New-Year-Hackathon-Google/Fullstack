@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import DetailModal from './detailModal';
+import Image from 'next/image';
 
 interface DateListProps {
   date: string;
@@ -29,9 +30,18 @@ export default function DateList({ date, status }: DateListProps) {
         className='flex items-center justify-between rounded-lg border-2 border-emerald-400 p-4 shadow-md'
       >
         <div className={`h-4 w-4 rounded-full ${statusClass} mr-4`} />
-        <div className='w-24 text-left text-sm font-medium text-gray-500'>
+
+        <div className='flex-1 text-left text-sm font-medium text-gray-600'>
           {date}
         </div>
+
+        <Image
+          src='/chevDown.png'
+          alt='down arrow'
+          width={16}
+          height={16}
+          className='ml-4'
+        />
       </div>
       {modalOpen && <DetailModal />}
     </div>
