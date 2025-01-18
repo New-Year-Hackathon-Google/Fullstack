@@ -3,11 +3,7 @@ import DateList from '../components/dateList';
 import { GetHistory } from '@/app/api/detailList/route';
 import { useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
-
-const DateLists = [
-  { date: '2024-01-16', status: '양호' },
-  { date: '2021-12-12', status: '나쁨' },
-];
+import { useRouter } from 'next/router';
 
 interface DateListProps {
   createdAt: string;
@@ -15,17 +11,27 @@ interface DateListProps {
 }
 
 function List() {
-  const pathname = usePathname(); // 현재 URL 경로 가져오기
+  const pathname = usePathname();
   const patientId = Number(pathname.split('/').pop());
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/patient/${patientId}`);
+  };
 
   const { data: history } = useQuery({
     queryKey: [patientId],
     queryFn: () => GetHistory(patientId),
   });
 
+  console.log('history data: ', history);
+
   return (
     <div className='relative'>
-      <button className='absolute right-4 top-4 h-10 rounded-lg bg-emerald-400 px-4 font-semibold text-white shadow-lg'>
+      <button
+        onClick={handleClick}
+        className='absolute right-4 top-4 h-10 rounded-lg bg-emerald-400 px-4 font-semibold text-white shadow-lg'
+      >
         현재 상태 추가
       </button>
       <div className='flex min-h-screen flex-col gap-4 p-4 pt-20'>

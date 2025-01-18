@@ -20,6 +20,7 @@ export default function DateList({ date, status }: DateListProps) {
     if (status === '주의') return 'bg-orange-500';
     if (status === '양호') return 'bg-yellow-400';
     if (status === '좋음') return 'bg-green-500';
+    else 'bg-gray-500';
   })();
 
   return (
