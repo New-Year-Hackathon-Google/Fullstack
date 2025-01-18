@@ -12,8 +12,11 @@ const Navbar = () => {
     <nav className='w-full bg-white px-4 shadow-md'>
       <div className='flex h-16 items-center justify-between'>
         <div className=''>
-          <Link href='/' className='text-xl font-bold text-gray-800'>
-            Logo
+          <Link
+            href='/'
+            className='hidden text-xl font-bold text-emerald-500 sm:block'
+          >
+            Silver Bridge
           </Link>
         </div>
 

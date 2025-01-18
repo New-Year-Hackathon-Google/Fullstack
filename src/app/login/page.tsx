@@ -1,9 +1,9 @@
-import GoogleAuthButton from './_components/GoogleAuthButton';
+import SplashPage from '@/components/layouts/Splash/SplashPage';
 
 export default function LoginPage() {
   return (
     <div>
-      <GoogleAuthButton />
+      <SplashPage />
     </div>
   );
 }

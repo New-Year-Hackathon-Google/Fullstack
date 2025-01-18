@@ -1,6 +1,7 @@
 'use client';
 
 import axios from 'axios';
+import { Icon } from '@iconify/react';
 
 // Axios 인스턴스 생성 및 Interceptor 설정
 const apiClient = axios.create({
@@ -42,9 +43,12 @@ const GoogleLogin = () => {
   return (
     <button
       onClick={handleLogin}
-      className='rounded-3xl bg-blue-400 p-3 font-bold text-white duration-200 hover:scale-110'
+      className='bottom-8 mb-10 flex w-64 items-center justify-center rounded-lg bg-slate-100 py-3 font-semibold text-black transition duration-200 hover:bg-emerald-300'
     >
-      Login with Google
+      <span className='flex items-center'>
+        <Icon icon='flat-color-icons:google' className='mr-2 h-6 w-6' />
+        Google로 로그인
+      </span>
     </button>
   );
 };
