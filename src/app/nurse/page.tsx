@@ -24,9 +24,23 @@ const NurseDashboard = () => {
 
   const fetchPatients = async () => {
     try {
-      const response = await axios.get<Patient[]>('/api/patients');
-      setPatients(response.data);
-      console.log('get 성공!! 환자 리스트들', response.data);
+      const accessToken = localStorage.getItem('accessToken');
+
+      const response = await axios.get('/api/patients', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      console.log('환자 리스트 가져오기 성공!!!', response.data);
+
+      // response.data.data에서 배열만 추출
+      if (response.data.success && Array.isArray(response.data.data)) {
+        setPatients(response.data.data);
+        console.log('환자 리스트:', response.data.data);
+      } else {
+        console.error('응답 데이터 형식이 잘못되었습니다:', response.data);
+      }
     } catch (error) {
       console.error('Error fetching patient data:', error);
     }

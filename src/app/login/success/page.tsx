@@ -32,6 +32,8 @@ export default function SuccessPage() {
         );
 
         localStorage.setItem('user', JSON.stringify(res.data));
+
+        router.replace('/');
       } catch (error) {
         console.error('Auth error:', error);
         router.replace('/login');

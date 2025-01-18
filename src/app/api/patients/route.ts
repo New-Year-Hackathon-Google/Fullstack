@@ -1,50 +1,93 @@
-import { NextResponse } from 'next/server';
 import axios from 'axios';
+import { NextResponse } from 'next/server';
 
-const apiUrl = 'http://backya.duckdns.org:8080/api/v1/patients';
-
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const response = await axios.get(apiUrl);
+    // 클라이언트에서 accessToken을 전달받음 (쿼리 파라미터 또는 헤더)
+    const accessToken = req.headers
+      .get('authorization')
+      ?.replace('Bearer ', '');
 
-    return NextResponse.json(response.data);
+    if (!accessToken) {
+      return NextResponse.json(
+        { success: false, message: 'Access token is required' },
+        { status: 401 },
+      );
+    }
+
+    const response = await axios.get(
+      'http://backya.duckdns.org:8080/api/v1/patients',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    return NextResponse.json({
+      success: true,
+      data: response.data,
+    });
   } catch (error: any) {
-    console.error('Error fetching patients data:', error);
+    console.error('Error:', error);
 
     return NextResponse.json(
       {
-        error: error.response
-          ? `Failed to fetch patients data: ${error.response.statusText}`
-          : 'An error occurred while fetching patients data',
+        success: false,
+        message:
+          error.response?.data?.message ||
+          error.message ||
+          'Unknown error occurred',
       },
-      { status: error.response ? error.response.status : 500 },
+      { status: error.response?.status || 500 },
     );
   }
 }
 
 export async function POST(req: Request) {
-  const apiUrl = 'http://backya.duckdns.org:8080/api/v1/patients';
-
   try {
-    // Parse the incoming request body
     const body = await req.json();
+    const { memberId, accessToken } = body;
 
-    // Send the data to the external API using Axios
-    const response = await axios.post(apiUrl, body);
+    console.log('멤버 테스트 아이디!!!', memberId);
 
-    // Return the response data as a JSON response
-    return NextResponse.json(response.data, { status: 201 });
-  } catch (error: any) {
-    console.error('Error creating patient data:', error);
+    if (!memberId) {
+      return new Response(JSON.stringify({ error: 'memberId is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
-    // Handle HTTP errors and network errors
-    return NextResponse.json(
+    const apiUrl = `http://backya.duckdns.org:8080/api/v1/patients/member`;
+
+    // POST 요청으로 memberId 전달
+    const response = await axios.post(
+      apiUrl,
+      { memberId },
       {
-        error: error.response
-          ? `Failed to create patient data: ${error.response.statusText}`
-          : 'An error occurred while creating patient data',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-      { status: error.response ? error.response.status : 500 },
+    );
+
+    return new Response(JSON.stringify(response.data), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error: any) {
+    console.error('Error fetching patient data:', error);
+
+    return new Response(
+      JSON.stringify({
+        error: error.response
+          ? `Failed to fetch patient data: ${error.response.statusText}`
+          : 'An error occurred while fetching patient data',
+      }),
+      {
+        status: error.response?.status || 500,
+        headers: { 'Content-Type': 'application/json' },
+      },
     );
   }
 }
