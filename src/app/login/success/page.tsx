@@ -21,7 +21,7 @@ export default function SuccessPage() {
         localStorage.setItem('accessToken', accessToken);
 
         const res = await axios.get(
-          'http://backya.duckdns.org:8080/api/v1/member/me',
+          'https://dev.silver-bridge.kr/api/v1/member/me',
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
