@@ -1,39 +1,34 @@
+import { NextResponse } from 'next/server';
 import { connectMongoDB } from '@/lib/mongodb';
 import Patient from '@/model/patient';
-import { NextResponse } from 'next/server';
 
-export async function POST(request: Request) {
+export const POST = async (req: Request) => {
   try {
-    await connectMongoDB();
+    const { patientId } = await req.json();
 
-    const { id } = await request.json();
-
-    if (!id) {
+    if (!patientId) {
       return NextResponse.json(
-        { error: 'ID parameter is required' },
+        { error: 'patientId is required' },
         { status: 400 },
       );
     }
 
-    console.log('Received ID:', id); // 프론트엔드에서 받은 ID 확인
+    // MongoDB 연결
+    await connectMongoDB();
 
-    const existingRecord = await Patient.findById(id);
+    // 환자 정보 검색
+    const patient = await Patient.findOne({ patientId });
 
-    console.log('테스트@@@@', existingRecord);
-
-    if (!existingRecord) {
-      return NextResponse.json(
-        { error: 'Patients not found' },
-        { status: 404 },
-      );
+    if (!patient) {
+      return NextResponse.json({ error: 'Patient not found' }, { status: 404 });
     }
 
-    return NextResponse.json(existingRecord, { status: 200 });
+    return NextResponse.json(patient, { status: 200 });
   } catch (error) {
-    console.error('Error fetching Patients:', error);
+    console.error('Error fetching patient info:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch Patients' },
+      { error: 'Internal server error' },
       { status: 500 },
     );
   }
-}
+};
