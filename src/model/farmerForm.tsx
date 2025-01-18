@@ -1,18 +1,18 @@
 import { Schema, model, models, Model, Document } from 'mongoose';
 
-export interface IFarmerForm extends Document {
+export interface IPatient extends Document {
   name: string;
-  type: string;
-  imageUrl: string;
-  duration: string;
+  dateOfBirth: string;
+  room: number;
+  status: string;
 }
 
-const farmerFormSchema = new Schema<IFarmerForm>(
+const patientSchema = new Schema<IPatient>(
   {
     name: { type: String, required: true },
-    type: { type: String, required: true },
-    imageUrl: { type: String, required: true },
-    duration: { type: String, required: true },
+    dateOfBirth: { type: String, required: true },
+    room: { type: Number, required: true },
+    status: { type: String, required: true },
   },
   {
     collection: 'farmerForm',
@@ -20,7 +20,7 @@ const farmerFormSchema = new Schema<IFarmerForm>(
   },
 );
 
-const FarmerForm: Model<IFarmerForm> =
-  models.FarmerForm || model<IFarmerForm>('FarmerForm', farmerFormSchema);
+const Patient: Model<IPatient> =
+  models.Patient || model<IPatient>('Patient', patientSchema);
 
-export default FarmerForm;
+export default Patient;

@@ -1,15 +1,14 @@
 import { connectMongoDB } from '@/lib/mongodb';
-import FarmerForm from '@/model/farmerForm';
+import Patient from '@/model/farmerForm';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
     await connectMongoDB();
 
-    // Fetch all documents from the farmerForm collection
-    const farmers = await FarmerForm.find({});
+    const patients = await Patient.find({});
 
-    return NextResponse.json({ farmers }, { status: 200 });
+    return NextResponse.json({ patients }, { status: 200 });
   } catch (error) {
     console.error('Error fetching farmers:', error);
     return NextResponse.json(
@@ -25,32 +24,35 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    const { name, type, imageUrl, duration } = body;
-    if (!name || !type || !imageUrl || !duration) {
+    const { name, dateOfBirth, room, status } = body;
+    if (!name || !dateOfBirth || !room || !status) {
       return NextResponse.json(
         {
-          error: 'All fields (name, type, imageUrl, duration) are required',
+          error: 'All fields (name, dateOfBirth, room, status) are required',
         },
         { status: 400 },
       );
     }
 
     // Create a new farmer document
-    const newFarmer = await FarmerForm.create({
+    const newPatient = await Patient.create({
       name,
-      type,
-      imageUrl,
-      duration,
+      dateOfBirth,
+      room,
+      status,
     });
 
     return NextResponse.json(
-      { message: 'Farmer data saved successfully!', farmer: newFarmer },
+      {
+        message: '새로운 환자의 정보가 정상적으로 등록되었습니다.',
+        patient: newPatient,
+      },
       { status: 201 },
     );
   } catch (error) {
-    console.error('Error saving farmer:', error);
+    console.error('새로운 환자 정보 등록 실패:', error);
     return NextResponse.json(
-      { error: 'Failed to save farmer data' },
+      { error: '새로운 환자 정보 등록 실패' },
       { status: 500 },
     );
   }
