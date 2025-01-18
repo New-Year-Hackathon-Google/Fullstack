@@ -24,11 +24,21 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    const { name, dateOfBirth, roomNumber, bloodType, status, nurseName } =
-      body;
+    const {
+      name,
+      dateOfBirth,
+      height,
+      weight,
+      roomNumber,
+      bloodType,
+      status,
+      nurseName,
+    } = body;
     if (
       !name ||
       !dateOfBirth ||
+      !height ||
+      !weight ||
       !roomNumber ||
       !bloodType ||
       !status ||

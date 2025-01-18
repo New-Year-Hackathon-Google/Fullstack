@@ -8,6 +8,8 @@ import Link from 'next/link';
 interface Patient {
   _id: string;
   name: string;
+  height: string;
+  weight: string;
   dateOfBirth: string;
   roomNumber: number;
   bloodType: string;
@@ -51,6 +53,8 @@ const NurseDashboard = () => {
             <tr className='bg-gray-200 text-gray-700'>
               <th className='p-2'>이름</th>
               <th className='p-2'>생년월일</th>
+              <th className='p-2'>키(cm)</th>
+              <th className='p-2'>몸무게(kg)</th>
               <th className='p-2'>병실 번호</th>
               <th className='p-2'>혈액형</th>
               <th className='p-2'>상태</th>
@@ -69,6 +73,8 @@ const NurseDashboard = () => {
                 </td>
                 <td className='p-2 text-center'>{patient.dateOfBirth}</td>
                 <td className='p-2 text-center'>{patient.roomNumber}</td>
+                <td className='p-2 text-center'>{patient.height}</td>
+                <td className='p-2 text-center'>{patient.weight}</td>
                 <td className='p-2 text-center'>{patient.bloodType}</td>
                 <td className='p-2 text-center'>{patient.status}</td>
                 <td className='p-2 text-center'>{patient.nurseName}</td>
