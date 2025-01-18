@@ -26,7 +26,9 @@ export default function SuccessPage() {
           },
         });
 
-        localStorage.setItem('user', JSON.stringify(res.data));
+        console.log('테스트', res);
+
+        localStorage.setItem('user', JSON.stringify(res.data.data));
 
         router.replace('/');
       } catch (error) {
