@@ -9,11 +9,10 @@ interface NavItem {
   href: string;
 }
 
-const navItems: NavItem[] = [
+const navItems = [
   { title: '홈', href: '/' },
   { title: '소개', href: '/about' },
-  { title: '프로그램', href: '/program' },
-  { title: '매칭 서비스', href: '/match' },
+  { title: '서비스', href: '/service' },
 ];
 
 export default function MobileDropdown() {

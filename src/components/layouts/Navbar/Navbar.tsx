@@ -4,8 +4,7 @@ import MobileDropdown from './MobileDropdown';
 const navItems = [
   { title: '홈', href: '/' },
   { title: '소개', href: '/about' },
-  { title: '프로그램', href: '/program' },
-  { title: '매칭 서비스', href: '/match' },
+  { title: '서비스', href: '/service' },
 ];
 
 const Navbar = () => {
@@ -18,7 +17,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop  Navigation */}
         <div className='hidden flex-1 items-center justify-center space-x-8 md:flex'>
           {navItems.map((item) => (
             <Link
